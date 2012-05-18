@@ -1,0 +1,21 @@
+﻿@model Performance.WebApp.Controllers.ExecuteExpensiveViewModel
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Performance tests</title>
+    </head>
+    <body>
+        <div>
+            @Model.ExternalData  
+        </div>
+        <div>
+            @Model.QueryResult
+        </div>
+    </body>
+</html>
