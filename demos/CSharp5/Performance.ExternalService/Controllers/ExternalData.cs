@@ -9,10 +9,12 @@ namespace Performance.ExternalService.Controllers
     {
          public HttpResponseMessage Get()
          {
-             Thread.Sleep(TimeSpan.FromMilliseconds(500));
+             var waitTime = TimeSpan.FromSeconds(1);
+             Thread.Sleep(waitTime);
              return new HttpResponseMessage
                         {
-                            Content = new StringContent("This is very important data that took more than 500ms to prepare")
+                            Content = new StringContent(
+                                string.Format("This is very important data that took more than {0} to prepare", waitTime))
                         };
          }
     }
