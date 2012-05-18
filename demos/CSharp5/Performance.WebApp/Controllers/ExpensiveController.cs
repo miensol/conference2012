@@ -115,5 +115,15 @@ SELECT * FROM [dbo].[Words]")
                 return getResults(connection);
             }
         }
+        
+        private async Task<TResult> WithConnectionDo<TResult>(Func<SqlConnection, Task<TResult>> getResults)
+        {
+            var connectionString = ConfigurationManager.ConnectionStrings["Simple"];
+            using (var connection = new SqlConnection(connectionString.ConnectionString))
+            {
+                connection.Open();
+                return await getResults(connection);
+            }
+        }
     }
 }
