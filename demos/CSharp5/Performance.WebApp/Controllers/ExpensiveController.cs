@@ -81,48 +81,37 @@ SELECT * FROM [dbo].[Words]")
     }
 
     public class DatabaseQuery
-    {        
+    {
+        private ConnectionStringSettings _connectionString;
+
+        public DatabaseQuery()
+        {
+            _connectionString = ConfigurationManager.ConnectionStrings["Simple"];
+        }
+
         public IEnumerable<string> GetResults(string sqlQuery)
         {
-            return WithConnectionDo(connection =>
+            using (var connection = new SqlConnection(_connectionString.ConnectionString))
             {
+                connection.Open();
                 var query = new SqlCommand(sqlQuery, connection);
                 using (var reader = query.ExecuteReader())
                 {
                     return reader.Select(dr => dr[0].ToString()).ToList();
                 }
-            });
+            }
         }
 
-        public Task<IEnumerable<string>> GetresultsAsync(string sqlQuery)
+        public async Task<IEnumerable<string>> GetresultsAsync(string sqlQuery)
         {
-            return WithConnectionDo(async connection =>
+            using (var connection = new SqlConnection(_connectionString.ConnectionString))
             {
+                connection.Open();
                 var query = new SqlCommand(sqlQuery, connection);
                 using (var reader = await query.ExecuteReaderAsync())
                 {
                     return (IEnumerable<string>)reader.Select(dr => dr[0].ToString()).ToList();
                 }
-            });
-        }
-
-        private TResult WithConnectionDo<TResult>(Func<SqlConnection, TResult> getResults)
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["Simple"];
-            using (var connection = new SqlConnection(connectionString.ConnectionString))
-            {
-                connection.Open();
-                return getResults(connection);
-            }
-        }
-        
-        private async Task<TResult> WithConnectionDo<TResult>(Func<SqlConnection, Task<TResult>> getResults)
-        {
-            var connectionString = ConfigurationManager.ConnectionStrings["Simple"];
-            using (var connection = new SqlConnection(connectionString.ConnectionString))
-            {
-                connection.Open();
-                return await getResults(connection);
             }
         }
     }
