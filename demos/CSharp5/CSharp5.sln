@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CallerInfo", "CallerInfo", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallerInfo", "CallerInfo\CallerInfo.csproj", "{34628AC4-1E0A-426C-8FAE-540A7EAA079E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DownloadPage.Reactive", "DownloadPage.Reactive\DownloadPage.Reactive.csproj", "{CA1A8F78-2D5B-4829-A373-C26834B97B6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,6 +25,10 @@ Global
 		{A5D4CDB3-FABB-45E5-A971-3F25AFD041F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A5D4CDB3-FABB-45E5-A971-3F25AFD041F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A5D4CDB3-FABB-45E5-A971-3F25AFD041F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA1A8F78-2D5B-4829-A373-C26834B97B6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA1A8F78-2D5B-4829-A373-C26834B97B6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA1A8F78-2D5B-4829-A373-C26834B97B6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA1A8F78-2D5B-4829-A373-C26834B97B6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -30,5 +36,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{34628AC4-1E0A-426C-8FAE-540A7EAA079E} = {89E7E326-7919-43A8-9EC7-A74C0FA27E41}
 		{A5D4CDB3-FABB-45E5-A971-3F25AFD041F2} = {D82A6019-E12A-42B9-81AE-EE2A3141498A}
+		{CA1A8F78-2D5B-4829-A373-C26834B97B6C} = {D82A6019-E12A-42B9-81AE-EE2A3141498A}
 	EndGlobalSection
 EndGlobal
