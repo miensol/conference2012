@@ -34,10 +34,9 @@ namespace DownloadPage.Reactive
                 request.BeginGetResponse,
                 result => (HttpWebResponse) request.EndGetResponse(result)
             );
-
-            observable().Subscribe(ReadResponseStream, OnError);
-
-            Reactive.Log("Fired BeginGetResponse");
+            Reactive.Log("Fired BeginGetResponse");            
+            observable().Subscribe(ReadResponseStream, OnError);            
+            Reactive.Log("Subscribed to results and errors");
         }
 
         private static void ReadResponseStream(HttpWebResponse obj)
