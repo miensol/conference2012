@@ -9,13 +9,23 @@
 <html>
     <head>
         <title>Performance tests</title>
+        <style type="text/css">
+            .external-data {
+                margin: 10px;
+                font-size: 30px;
+                font-family: Arial;
+            }
+        </style>
     </head>
     <body>
-        <div>
+        <div class="external-data">
             @Model.ExternalData  
         </div>
-        <div>
-            @Model.QueryResult
+        <div class="external-data">
+            @foreach(var word in Model.QueryResult)
+            {
+                @word <br/>
+            }
         </div>
     </body>
 </html>
