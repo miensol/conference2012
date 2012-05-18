@@ -68,7 +68,7 @@ namespace DownloadPage.Async
             Async.Log("Created http request");
             try
             {
-                var response = await request.GetResponseAsync();
+                var response = await request.GetResponseAsync();                        
                 using (var streamReader = new StreamReader(response.GetResponseStream()))
                 {
                     Async.Log("Received response stream");
@@ -84,5 +84,25 @@ namespace DownloadPage.Async
             
             return string.Empty;
         }
+
+
+
+        public async Task<long> GetLength(string address)
+        {
+            try
+            {
+                var request = WebRequest.CreateHttp(address);
+                var response = await request.GetResponseAsync();
+                return response.ContentLength;
+            }
+            catch (Exception)
+            {
+                return -1;
+            }
+        }
+
     }
+
+
+ 
 }

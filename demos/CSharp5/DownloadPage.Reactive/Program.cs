@@ -52,6 +52,7 @@ namespace DownloadPage.Reactive
             catch (ProtocolViolationException ex)
             {
                 Reactive.Log("Connection was abruptly closed?");
+                Reactive.Log(ex.Message);
             }
         }
 
