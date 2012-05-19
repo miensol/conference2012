@@ -42,7 +42,7 @@ SELECT * FROM [dbo].[Words]")
             return View("Execute", new ExecuteExpensiveViewModel
                                        {
                                            ExternalData = await _remoteService.ReadDataAsync(),
-                                           QueryResult = await _database.GetresultsAsync(
+                                           QueryResult = await _database.GetResultsAsync(
                                                @"WAITFOR DELAY '00:00:01';
 SELECT * FROM [dbo].[Words]")
                                        });
@@ -102,7 +102,7 @@ SELECT * FROM [dbo].[Words]")
             }
         }
 
-        public async Task<IEnumerable<string>> GetresultsAsync(string sqlQuery)
+        public async Task<IEnumerable<string>> GetResultsAsync(string sqlQuery)
         {
             using (var connection = new SqlConnection(_connectionString.ConnectionString))
             {
