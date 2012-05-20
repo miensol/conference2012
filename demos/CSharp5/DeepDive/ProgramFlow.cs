@@ -6,7 +6,7 @@ using Nito.AsyncEx;
 namespace DeepDive
 {
     public class ProgramFlow : BaseAsyncTest
-    {
+    { 
         private static Logger StandardFlow = Logger.Get();
         
         protected override void Because()
