@@ -46,5 +46,17 @@ namespace DeepDive
         {
             Merge(new[] {3}, new[] {2, 4, 6}).Should().ContainInOrder(new[] {2, 3, 4, 6});
         }
+
+        [Test]
+        public void should_merge_sequences_with_equal_values_properly()
+        {
+            Merge(new[] {2, 2, 2, 2}, new[] {2, 2}).Should().ContainInOrder(new[] {2, 2, 2, 2, 2});
+        }
+
+        [Test]
+        public void should_merge_revrsed_sequences_properly()
+        {
+            Merge(new[] {4, 5, 6}, new[] {1, 2, 3}).Should().ContainInOrder(new[] {1, 2, 3, 4, 5, 6});
+        }
     }
 }

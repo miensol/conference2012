@@ -54,6 +54,8 @@
     <Compile Include="BasicAwaiterTest.cs" />
     <Compile Include="ClassicMerge.cs" />
     <Compile Include="CoroutinesMerge.cs" />
+    <Compile Include="FifoCoordinator.cs" />
+    <Compile Include="OneTimeAwaiter.cs" />
     <Compile Include="ProgramFlow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

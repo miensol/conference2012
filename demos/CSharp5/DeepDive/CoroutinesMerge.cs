@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
@@ -18,121 +17,68 @@ namespace DeepDive
          }
     }
 
+
     public class MergeCoordinator<TValue>
         where TValue : IComparable<TValue>
     {
         private readonly IEnumerable<TValue> _leftSequence;
         private readonly IEnumerable<TValue> _rightSequence;
-        private Queue<SmallestValueAwaiter<TValue>> _queue = new Queue<SmallestValueAwaiter<TValue>>();
-        public Tuple<bool, TValue> Smallest { get; set; }
+        private readonly FifoCoordinator _coroutinesQueue;
+
 
         public MergeCoordinator(IEnumerable<TValue> leftSequence, IEnumerable<TValue> rightSequence)
         {
-            Smallest = new Tuple<bool, TValue>(false, default(TValue));
             _leftSequence = leftSequence;
             _rightSequence = rightSequence;
+            _coroutinesQueue = new FifoCoordinator();
         }
+
 
         public IEnumerable<TValue> GetResult()
         {
             var result = new List<TValue>();
-            Merge(_leftSequence, result);
-            Merge(_rightSequence, result);
-            while(_queue.Any())
-            {
-                _queue.Dequeue().Resume();
-            }
+            BeginMerge(_leftSequence, result);
+            BeginMerge(_rightSequence, result);
+            _coroutinesQueue.Flush();
             return result;
         }
 
-        private async void Merge(IEnumerable<TValue> sequence, IList<TValue> result)
+        private TValue OtherSequenceCurrent { get; set; }
+
+        private bool HasSmallestValue { get; set; }
+
+        private async void BeginMerge(IEnumerable<TValue> sequence, ICollection<TValue> result)
         {
             foreach (var value in sequence)
             {
-                if(HasSmallestValue == false)
-                {                    
-                    SetSmallestValue(value);
-                    await SwitchToOther();
+                if(HasSmallestValue == false || value.CompareTo(OtherSequenceCurrent) > 0)
+                {                                        
+                    await OtherSeqeunce(value);
                 }
-                await SmallestValueIs(value);
                 result.Add(value);
             }
 
         }
 
-        private Swi SwitchToOther()
+        private OneTimeAwaiter OtherSeqeunce(TValue currentSequenceValue)
         {
-            throw new NotImplementedException();
-        }
-
-        protected bool HasSmallestValue
-        {
-            get { return Smallest.Item1; }
-        }
-
-
-        private void SetSmallestValue(TValue value)
-        {
-            Smallest = Tuple.Create(true, value);
-        }
-
-        private SmallestValueAwaiter<TValue> SmallestValueIs(TValue currentValue)
-        {
-            return new SmallestValueAwaiter<TValue>(this, currentValue);
-        }
-
-
-        public void Enqueue(SmallestValueAwaiter<TValue> smallestValueAwaiter)
-        {
-            _queue.Enqueue(smallestValueAwaiter);
+            OtherSequenceCurrent =  currentSequenceValue;
+            HasSmallestValue = true;
+            return _coroutinesQueue.AtEndOfQueue();
         }
     }
 
-    public class SmallestValueAwaiter<T> : INotifyCompletion
-           where T : IComparable<T>
+   
+
+    public abstract class AwaiterVoidBase<TAwaiter> : INotifyCompletion
     {
-        private readonly MergeCoordinator<T> _coordinator;
-        private readonly T _currentValue;
-        private Action _continuation;
-
-        public SmallestValueAwaiter(MergeCoordinator<T> coordinator, T currentValue)
+        public virtual void GetResult(){}
+        public abstract bool IsCompleted { get; }
+        public abstract void OnCompleted(Action continuation);
+        public TAwaiter GetAwaiter()
         {
-            _coordinator = coordinator;
-            _currentValue = currentValue;
-        }
-
-        public bool IsCompleted
-        {
-            get
-            {                
-                if (_currentValue.CompareTo(_coordinator.Smallest.Item2) <= 0)
-                {
-                    _coordinator.Smallest = Tuple.Create(true, _currentValue);
-                    return true;
-                }
-                return false;
-            }
-        }
-
-        public T GetResult()
-        {
-            return _currentValue;
-        }
-
-        public void OnCompleted(Action continuation)
-        {
-            _coordinator.Enqueue(this);
-            _continuation = continuation;
-        }
-
-        public SmallestValueAwaiter<T> GetAwaiter()
-        {
-            return this;
-        }
-
-        public void Resume()
-        {
-            _continuation();
+            object awaiter = this;
+            return (TAwaiter)awaiter;
         }
     }
 
