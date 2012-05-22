@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentAssertions">
+      <HintPath>..\packages\FluentAssertions.1.7.1.1\Lib\net40\FluentAssertions.dll</HintPath>
+    </Reference>
     <Reference Include="Nito.AsyncEx">
       <HintPath>..\packages\Nito.AsyncEx.0.8.0\lib\net45-client\Nito.AsyncEx.dll</HintPath>
     </Reference>
@@ -47,7 +50,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseAsyncTest.cs" />
+    <Compile Include="BaseMergeSequenceTest.cs" />
     <Compile Include="BasicAwaiterTest.cs" />
+    <Compile Include="ClassicMerge.cs" />
+    <Compile Include="CoroutinesMerge.cs" />
     <Compile Include="ProgramFlow.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
