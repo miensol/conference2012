@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DeepDive
@@ -14,15 +12,16 @@ namespace DeepDive
              where TValue : IComparable<TValue>
          {
              var fifo = new FifoCoordinator();
-             var currentValueInOrder = default(TValue);
+             var currentValueOfOtherSequence = default(TValue);
              var result = new List<TValue>();
-             Action<bool,IEnumerable<TValue>> mergeCouroutine = async (isFirst,sequence) =>
+            
+            Action<bool,IEnumerable<TValue>> mergeCouroutine = async (isFirst,sequence) =>
              {
                  foreach (var value in sequence)
                  {
-                     if(isFirst || value.CompareTo(currentValueInOrder) > 0)
+                     if(isFirst || value.CompareTo(currentValueOfOtherSequence) > 0)
                      {
-                         currentValueInOrder = value;                         
+                         currentValueOfOtherSequence = value;                         
                          await fifo.AtEndOfQueue();
                      }
                      result.Add(value);
@@ -30,7 +29,8 @@ namespace DeepDive
              };
              mergeCouroutine(true, leftSequence);
              mergeCouroutine(false, rightSequence);
-             fifo.Flush();
+          
+            fifo.Flush();
              return result;
          }
 
@@ -66,45 +66,6 @@ namespace DeepDive
         {
             var mergeCoordintator = new MergeCoordinator<TValue>(leftSequence, rightSequence);
             return mergeCoordintator.GetResult();
-        }
-    }
-
-    public class FifoCoordinatorSink<T> : IEnumerable<T>
-    {
-        public Queue<OneTimeAwaiter> _queue = new Queue<OneTimeAwaiter>();
-        public List<T> _results = new List<T>();
-    
-        public IEnumerator<T> GetEnumerator()
-        {
-            while(_queue.Any())
-            {
-                _queue.Dequeue().Resume();
-                if(_results.Any())
-                {
-                    foreach (var result in _results)
-                    {
-                        yield return result;
-                    }
-                }
-                
-            };
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public OneTimeAwaiter AtEndOfQueue()
-        {
-            var oneTimeAwaiter = new OneTimeAwaiter();
-            _queue.Enqueue(oneTimeAwaiter);
-            return oneTimeAwaiter;
-        }
-
-        public void Add(T value)
-        {
-            _results.Add(value);
         }
     }
 
