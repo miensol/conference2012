@@ -5,6 +5,7 @@ namespace DeepDive
 {
     public static class ClassicMerge
     {
+        // code by http://code.logos.com/blog/2010/10/coroutines_with_c_5s_await.html
         public static IEnumerable<TValue> MergeClassic<TValue>(
             this IEnumerable<TValue> leftSequence,
             IEnumerable<TValue> rightSequence)
