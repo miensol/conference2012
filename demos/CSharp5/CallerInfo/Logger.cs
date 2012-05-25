@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CallerInfo
 {
     public class Logger
     {
-        private string _className;
+        private readonly string _className;
 
         private Logger(string mayBeClassName)
         {
