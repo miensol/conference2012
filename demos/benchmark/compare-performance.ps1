@@ -71,7 +71,6 @@ $asyncHash = ($bothResutls | ConvertTo-Hashtable Percentage ExecuteAsync)
 $bothResutls | Out-Chart -chartType 'line' -xField Percentage -yField Execute
 $Chart.Series.Add("Second")
 $asyncSeries = $Chart.Series["Second"]
-$asyncSeries.ChartType = [System.Windows.Forms.DataVisualization.Charting.SeriesChartType]::Line
 $asyncSeries.Points.DataBindXY($asyncHash.Keys, $asyncHash.Values)
-$Chart.ResetAutoValues()
-$Chart.Invalidate()
+$asyncSeries.ChartType = [System.Windows.Forms.DataVisualization.Charting.SeriesChartType]::Line
+
