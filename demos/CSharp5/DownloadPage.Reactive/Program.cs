@@ -17,7 +17,7 @@ namespace DownloadPage.Reactive
         private static void Main(string[] args)
         {
             PerformRequest();
-
+            
             Reactive.Log("Hit enter to close");
             Console.ReadLine();
         }

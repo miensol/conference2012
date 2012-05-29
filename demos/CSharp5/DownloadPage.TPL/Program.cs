@@ -80,27 +80,17 @@ namespace DownloadPage.TPL
             TPL_Async.Log("Created http request");
          
             // here we are not sheduling a Task but we use async http requets under the hood
-            var taskCompletion = new TaskCompletionSource<long>();            
-            request.BeginGetResponse(state =>
+            var fromAsyncPattern = Task.Factory.FromAsync(request.BeginGetResponse, result =>
             {
-                try
+                var response = request.EndGetResponse(result);
+                using (var streamReader = new StreamReader(response.GetResponseStream()))
                 {
-                    var response = request.EndGetResponse(state);
-                    using (var streamReader = new StreamReader(response.GetResponseStream()))
-                    {
-                        TPL_Async.Log("Received response stream");
-                        TPL_Async.Log(string.Format("{0}...", streamReader.ReadToEnd().Substring(0, 100)));
-                        taskCompletion.SetResult(response.ContentLength);
-                    }
-                }
-                catch (Exception ex)
-                {
-                    taskCompletion.SetException(ex);
+                    TPL_Async.Log("Received response stream");
+                    TPL_Async.Log(string.Format("{0}...", streamReader.ReadToEnd().Substring(0, 100)));                    
                 }                
-
-            }, request);
+            }, request, TaskCreationOptions.None);
             TPL_Async.Log("Fired request");
-            return taskCompletion.Task;
+            return fromAsyncPattern;
 
         }
 
