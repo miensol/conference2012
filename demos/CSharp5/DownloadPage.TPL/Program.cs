@@ -47,8 +47,8 @@ namespace DownloadPage.TPL
 
         private static Task PerformRequest()
         {
+            //here an exceptio may be thrown also
             var address = new Uri("http://www.goodgle.com");
-
             var request = WebRequest.CreateHttp(address);
             TPL.Log("Created http request");
             // here we are not using async http request but sheduling job to be executed in future
@@ -74,13 +74,13 @@ namespace DownloadPage.TPL
 
         private static Task PerformRequestAsync()
         {
+            //here an exceptio may be thrown also
             var address = new Uri("http://www.goodgle.com");
-
             var request = WebRequest.CreateHttp(address);
             TPL_Async.Log("Created http request");
-            // here we are returning a task though be we use async http requets under the hood
-            var taskCompletion = new TaskCompletionSource<long>();
-            
+         
+            // here we are not sheduling a Task but we use async http requets under the hood
+            var taskCompletion = new TaskCompletionSource<long>();            
             request.BeginGetResponse(state =>
             {
                 try

@@ -23,8 +23,8 @@ namespace DownloadPage.BeginEnd
 
         private static void PerformRequest()
         {
+            //here exception may be thrown also
             var address = new Uri("http://www.ddgoodgle.com");
-
             var request = WebRequest.CreateHttp(address);
             BeginEndProgram.Log("Created http request");
             //here another exception may be thrown

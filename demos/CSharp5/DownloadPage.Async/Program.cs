@@ -29,12 +29,12 @@ namespace DownloadPage.Async
 
         private static async void PerformRequestVoid()
         {
-            var address = new Uri("http://www.goodgle.com");
-
-            var request = WebRequest.CreateHttp(address);
-            Async.Log("Created http request");            
             try
             {
+                var address = new Uri("http://www.goodgle.com");
+                var request = WebRequest.CreateHttp(address);
+                Async.Log("Created http request");            
+                
                 var response = await request.GetResponseAsync();
                 using (var streamReader = new StreamReader(response.GetResponseStream()))
                 {
